@@ -27,3 +27,13 @@ Thumbs.db
 
 # === Other ===
 aws-terraform-architecture.png
+
+# Terraform files to ignore
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+terraform.tfstate.d/
+crash.log
+*.pem
+*.key
