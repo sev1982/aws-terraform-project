@@ -1,0 +1,29 @@
+# === Terraform files ===
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# === Sensitive files ===
+*.pem
+*.key
+*.pfx
+
+# === Local environment files ===
+*.log
+*.tmp
+*.bak
+
+# === VSCode & OS metadata ===
+.vscode/
+.DS_Store
+Thumbs.db
+
+# === Other ===
+aws-terraform-architecture.png
