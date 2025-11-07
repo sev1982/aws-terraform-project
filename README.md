@@ -1,58 +1,109 @@
-## version française
+# 🌍 AWS Terraform Infrastructure Project
 
-# Projet Terraform AWS – Serveur Web (Free Tier)
-
-##  Objectif
-Déployer une infrastructure complète AWS avec Terraform :
-- 1 VPC
-- 1 Subnet public et 1 privé
-- 1 Internet Gateway
-- 1 Route Table
-- 1 Security Group (HTTP + SSH)
-- 1 EC2 avec Apache Web Server
+## 🧾 Overview
+This project automates the deployment of AWS infrastructure using **Terraform**.  
+It includes an EC2 instance and uses a **remote backend** with **Amazon S3** (for state storage) and **DynamoDB** (for state locking), following real-world enterprise practices.
 
 ---
 
-## ⚙️ Commandes de base
+## 🧱 Project Structure
+aws-terraform-project/
+├── main.tf → Main infrastructure resources
+├── backend.tf → Remote backend configuration (S3 + DynamoDB)
+├── variables.tf → Input variables
+├── outputs.tf → Output definitions
+├── providers.tf → AWS provider setup
+├── setup_backend.sh → Script to create S3 and DynamoDB backend
+├── user_data.sh → EC2 startup script
+└── .gitignore → Git ignore rules
+
+---
+
+## ⚙️ Prerequisites
+- **Terraform** ≥ 1.5.0  
+- **AWS CLI** installed and configured with a valid profile  
+- IAM permissions to create:
+  - S3 buckets  
+  - DynamoDB tables  
+  - EC2 instances  
+
+---
+
+## 🚀 Deployment Steps
+
+### 1️⃣ Create the Remote Backend
+Before running Terraform, create the backend resources (S3 + DynamoDB):
+
 ```bash
-terraform init
+bash setup_backend.sh
+
+This script will:
+
+Create an S3 bucket named terraform-state-severin
+
+Create a DynamoDB table named terraform-locks
+
+Configure backend storage for Terraform
+
+2️⃣ Initialize Terraform
+
+Once the backend exists, initialize Terraform:
+
+terraform init -reconfigure
+
+3️⃣ Validate Configuration
 terraform validate
+
+4️⃣ Review the Execution Plan
 terraform plan
-terraform apply
+
+5️⃣ Apply the Infrastructure
+terraform apply -auto-approve
 
 
-## version anglaise
+Terraform will create your infrastructure and store the state remotely.
 
-# Terraform AWS Project – Web Server (Free Tier)
+6️⃣ Destroy Resources
 
-##  Objective
-Deploy a  complete AWS infrastructure using **Terraform** (compatible with the AWS Free Tier).
+To delete all created resources:
 
-This project automatically provisions:
-- 1 Virtual Private Cloud (VPC)
-- 1 Public Subnet and 1 Private Subnet
-- 1 Internet Gateway and Route Table
-- 1 Security Group (allowing HTTP + SSH)
-- 1 EC2 instance running a simple Apache web server
+terraform destroy -auto-approve
 
----
+🧠 Backend Details
 
-##  Prerequisites
-Before starting, make sure you have:
-- An **AWS account** (Free Tier works)
-- **Terraform** installed (`terraform -version`)
-- **AWS CLI** configured (`aws configure`)
-- A **key pair** created in AWS (name it `terraform-key`)
-- **Visual Studio Code** or any IDE you like
+State Storage: S3 bucket → terraform-state-severin
 
----
+State Locking: DynamoDB table → terraform-locks
 
-##  Project Structure
+Region: us-east-1
 
-terraform-aws-project/
-├── main.tf # Main infrastructure configuration
-├── provider.tf # AWS provider and Terraform settings
-├── outputs.tf # Outputs such as public IP or URL
-├── user-data.sh # Bash script to configure EC2 instance
-├── variables.tf # (Optional) variables for modularity
-└── README.md # Project documentation
+This ensures safe collaboration and avoids state conflicts when multiple users work on the same infrastructure.
+
+🧰 Example EC2 Resource
+resource "aws_instance" "app_server" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = var.instance_type
+  key_name      = var.key_name
+
+  user_data = file("user_data.sh")
+
+  tags = {
+    Name = "Terraform-EC2-Server"
+  }
+}
+
+🧹 .gitignore Example
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+crash.log
+*.pem
+
+👤 Author
+
+Séverin Kouemo Pouankam
+Infrastructure as Code | AWS | Terraform | DevOps
+📧 severin.kouemo@yahoo.fr
+🌐 www.linkedin.com/in/severin-kouemo-pouankam
