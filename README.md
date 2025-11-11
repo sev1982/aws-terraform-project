@@ -18,6 +18,11 @@ aws-terraform-project/
 └── .gitignore → Git ignore rules
 
 ---
+##Terraform and AWS project architecture
+
+<img width="559" height="372" alt="image" src="https://github.com/user-attachments/assets/15230328-b8cc-470c-9e26-261e481ae6a5" />
+
+---
 
 ## ⚙️ Prerequisites
 - **Terraform** ≥ 1.5.0  
